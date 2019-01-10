@@ -5,5 +5,9 @@
 　　　　　　　若失败，则通过发布　flag_cv_to_nav　交接控制权　
 运行方式：　直接在终端运行　runImgPro.sh　脚本文件即可
 
-　　　　　　
+
+//20190110
+启动： 
+./rundarknet.sh
+./runyoloTracker.sh
 
