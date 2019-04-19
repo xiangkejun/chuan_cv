@@ -10,4 +10,6 @@
 启动： 
 ./rundarknet.sh
 ./runyoloTracker.sh
+./test_flag_nav2cv.sh
 
+rqt_image_view
