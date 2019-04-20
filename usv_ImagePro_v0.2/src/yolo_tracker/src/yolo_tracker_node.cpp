@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     image_transport::Subscriber img_sub = it.subscribe("/camera/image", 10, imageCB);//订阅图像消息
 	ros::Subscriber Bbox_sub = n1.subscribe("/darknet_ros/bounding_boxes", 10, yoloBboxCB);//订阅boundingbox消息
 	ros::Subscriber controlFlag_sub = n1.subscribe<xx_msgs::Flag>("flag_nav_to_cv",10,gainControlCB);//订阅控制权限标志
-	vel_pub = n1.advertise<geometry_msgs::Twist>("cmd_vel_mux/input/teleop",10);//发布速度消息
+	vel_pub = n1.advertise<geometry_msgs::Twist>("/cmd_vel_mux/input/cv_vel",10);//发布速度消息
 	ctrl_pub=n1.advertise<xx_msgs::Flag>("flag_cv_to_nav",1);
 
     ROS_INFO("waiting control...");
