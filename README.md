@@ -2,7 +2,7 @@
 
 远程控制中需要关闭imshow()； 
 
-./rundarket.sh  需在tx2上直接运行。
+./rundarket.sh  需使用网线连接tx2与路由器，避免乱码。
 
 ./runyoloTracker.sh
 
