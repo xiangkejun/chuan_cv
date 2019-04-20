@@ -509,7 +509,7 @@ void YoloObjectDetector::yolo()
   ipl_ = cvCreateImage(cvSize(buff_[0].w, buff_[0].h), IPL_DEPTH_8U, buff_[0].c);
 
   int count = 0;
-
+/*
   if (!demoPrefix_ && viewImage_) {
     cvNamedWindow("YOLO V3", CV_WINDOW_NORMAL);
     if (fullScreen_) {
@@ -520,6 +520,7 @@ void YoloObjectDetector::yolo()
     }
   }
 
+*/
   demoTime_ = what_time_is_it_now();
 
   while (!demoDone_) {
