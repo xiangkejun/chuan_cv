@@ -225,3 +225,9 @@ add_executable(avi2pic src/avi2pic.cpp)
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
  )
+
+ add_executable(ros_video_save src/ros_video_save.cpp)
+ target_link_libraries(ros_video_save
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+ )
