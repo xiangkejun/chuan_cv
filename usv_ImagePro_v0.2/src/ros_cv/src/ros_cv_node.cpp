@@ -40,14 +40,14 @@ int main(int argc, char** argv)
   image_transport::ImageTransport it(nh);
   image_transport::Publisher pub = it.advertise("camera/image", 1);
   // ros::Subscriber controlFlag_sub = nh.subscribe<xx_msgs::Flag>("flag_3dlidar_to_cv",1,gainControlCB); 
-  std::string video_name = getParam<std::string>("ros_cv/videoname","rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream");
+//  std::string video_name = getParam<std::string>("ros_cv/videoname","rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream");
   // std::string video_name = "rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream";
   // std::string video_name = "/home/xx/andyoyo/usv_ImagePro/src/ros_cv/data/lib2.avi";
-  int camera_index = 0;
+  //int camera_index = 0;
   
-  cv::VideoWriter writer("/home/xx/andyoyo/data/write.avi",CV_FOURCC('M','J','P','G'),30.0,cv::Size(640,480));
+  //cv::VideoWriter writer("/home/xx/andyoyo/data/write.avi",CV_FOURCC('M','J','P','G'),30.0,cv::Size(640,480));
 
-  cv::VideoCapture cap(video_name);
+  cv::VideoCapture cap(1);
   std::string img_name;
   if(!cap.isOpened())
   {
