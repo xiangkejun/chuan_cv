@@ -9,7 +9,7 @@
 ./test_flag_nav2cv.sh 启动图像处理
 
 
-.bashr 
+.bashrc
 
 ```
 export PATH=/usr/local/cuda-9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin 
