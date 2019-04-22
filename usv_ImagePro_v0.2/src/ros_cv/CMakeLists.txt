@@ -205,3 +205,9 @@ add_executable(${PROJECT_NAME}_node src/ros_cv_node.cpp)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(cv_usb_test src/cv_usb_test.cpp)
+ target_link_libraries(cv_usb_test
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+ )
