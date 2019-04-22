@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<node pkg="ros_cv" type="cv_usb_test" name="cv_usb_test" output="screen" respawn="true">
+  <!--
+        <param name="videoname" value= "rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream"/>	
+-->
+	</node>	
+</launch>
