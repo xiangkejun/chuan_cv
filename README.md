@@ -7,3 +7,9 @@
 ./runyoloTracker.sh
 
 ./test_flag_nav2cv.sh 启动图像处理
+
+
+.bashr 
+export PATH=/usr/local/cuda-9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64:
+source /opt/ros/kinetic/setup.bash
