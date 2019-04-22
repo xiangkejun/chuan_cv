@@ -211,3 +211,17 @@ add_executable(cv_usb_test src/cv_usb_test.cpp)
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
  )
+ 
+ 
+ add_executable(video_save src/video_save.cpp)
+ target_link_libraries(video_save
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+ )
+
+
+add_executable(avi2pic src/avi2pic.cpp)
+ target_link_libraries(avi2pic
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+ )
