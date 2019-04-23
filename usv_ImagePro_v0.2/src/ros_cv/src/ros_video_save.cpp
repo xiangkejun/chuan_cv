@@ -1,5 +1,5 @@
 // xx
-// 订阅/camera/image后，保存为.av
+// 订阅/camera/image后，保存为.avi 
 
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
@@ -50,6 +50,7 @@ public:
     }
 
    writer<<cv_ptr->image;
+   std::cout<<"video is saving to /home/xx/Videos/write.avi ..."<<std::endl;
     // Draw an example circle on the video stream
     // if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
     //   cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
