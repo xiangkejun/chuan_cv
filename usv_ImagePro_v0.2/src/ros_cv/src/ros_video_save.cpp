@@ -1,3 +1,6 @@
+// xx
+// 订阅/camera/image后，保存为.av
+
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
