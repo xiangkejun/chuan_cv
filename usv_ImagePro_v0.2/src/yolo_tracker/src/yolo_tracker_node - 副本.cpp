@@ -23,7 +23,6 @@ int main(int argc, char* argv[])
 	ros::Subscriber controlFlag_sub = n1.subscribe<xx_msgs::Flag>("flag_nav_to_cv",10,gainControlCB);//订阅控制权限标志
 	vel_pub = n1.advertise<geometry_msgs::Twist>("/cmd_vel_mux/input/cv_vel",10);//发布速度消息
 	ctrl_pub=n1.advertise<xx_msgs::Flag>("flag_cv_to_nav",1);
-	tuolian_pub=n1.advertise<xx_msgs::Flag>("flag_tuolian_start",1);
 
     ROS_INFO("waiting control...");
 	ros::Rate rate(30.0);
@@ -105,23 +104,6 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 					  	yoloBbox.y+yoloBbox.height), 
 					  	cv::Scalar(0, 0, 255));
 
-			//拖链启动条件
-			if((310<yoloBbox.x<330)&&((460<yoloBbox.y<480)))
-			{
-				//拖链启动，交接控制权。
-				ROS_INFO("tuolian start...");
-				gainControl_flag = false;
-				xx_msgs::Flag flag_tuolian;
-				flag_tuolian.flag = "tuolian start";
-				tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
-
-				sleep(15); // 拖链运动10s后导航重新开始
-				xx_msgs::Flag flag_cv_to_nav;
-				flag_cv_to_nav.flag = "nav start,cv stop";
-				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
-			}
-
-
             yoloBbox = Rect(0,0,0,0);//yolobbox使用完之后归零
             yoloFindTarget = false;
             tryYoloCount=0;
@@ -136,7 +118,7 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
     	vel_pub.publish(vel_msg);
 
 		tryYoloCount++;
-		if(tryYoloCount>=MAX_TRY_YOLO)  //等待超时后交接控制权
+		if(tryYoloCount>=MAX_TRY_YOLO)
 		{
 			//交控制权
 			ROS_INFO("ImagePro lost control");
@@ -148,7 +130,7 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 		}
 	}
     cv::imshow("tracker frame",frame);
-    cv::waitKey(1);  // 1ms
+    cv::waitKey(1);
 }
 
 //控制权消息回调函数

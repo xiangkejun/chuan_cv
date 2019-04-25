@@ -27,6 +27,8 @@ double angularVelocity = 0;   //角速度
 int tryYoloCount = 0;         //yolo尝试次数计数
 ros::Publisher vel_pub;       //速度消息发布
 ros::Publisher ctrl_pub;      //控制权限消息发布
+ros::Publisher tuolian_pub;      //拖链消息发布
+
 
 void gainControlCB(const xx_msgs::Flag::ConstPtr& msg);
 void calcSpeed(cv::Rect &bBox,cv::Point &referencePoint,double &lineSpeed,double &angularVelocity);
