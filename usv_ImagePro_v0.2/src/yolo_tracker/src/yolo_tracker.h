@@ -18,7 +18,7 @@
 #define MIN_DIST        0.05
 #define MAX_LINEAR_VEL  0.2
 #define MAX_ANGULAR_VEL 0.5
-#define MAX_TRY_YOLO    100  //失败后连续尝试yolo最大次数
+#define MAX_TRY_YOLO    1000  //失败后连续尝试yolo最大次数
 
 bool gainControl_flag = false;//控制权标志位
 bool yoloFindTarget = false;  //yolo状态标志位
