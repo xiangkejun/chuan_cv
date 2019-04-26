@@ -89,6 +89,7 @@ void yoloBboxCB(const darknet_ros_msgs::BoundingBoxes::ConstPtr& box_msg)
   }
 }
 
+int center_x,center_y;
 void imageCB(const sensor_msgs::ImageConstPtr& msg)
 {	
     cv::Mat frame = cv_bridge::toCvShare(msg,"bgr8")->image;
@@ -105,8 +106,13 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 					  	yoloBbox.y+yoloBbox.height), 
 					  	cv::Scalar(0, 0, 255));
 
+			center_x=yoloBbox.x+yoloBbox.width/2;
+			center_y=yoloBbox.y+yoloBbox.height/2;
+			cout<<"center_x="<<center_x<<endl;
+			cout<<"center_y="<<center_y<<endl;
 			//拖链启动条件
-			if((310<yoloBbox.x<330)&&((460<yoloBbox.y<480)))
+//			if((310<(yoloBbox.x+yoloBbox.width/2)<330)&&((460<(yoloBbox.y+yoloBbox.height/2)<480)))
+			if((300<center_x)&&(center_x<340)&&(420<center_y)&&(center_y<480))
 			{
 				//拖链启动，交接控制权。
 				ROS_INFO("tuolian start...");
@@ -119,9 +125,10 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 				xx_msgs::Flag flag_cv_to_nav;
 				flag_cv_to_nav.flag = "nav start,cv stop";
 				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
+				ROS_INFO("nav start,cv stop");
 			}
 
-
+            
             yoloBbox = Rect(0,0,0,0);//yolobbox使用完之后归零
             yoloFindTarget = false;
             tryYoloCount=0;
@@ -147,7 +154,7 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 	        ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
 		}
 	}
-    cv::imshow("tracker frame",frame);
+   // cv::imshow("tracker frame",frame);
     cv::waitKey(1);  // 1ms
 }
 
