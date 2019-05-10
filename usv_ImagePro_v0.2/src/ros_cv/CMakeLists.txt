@@ -238,3 +238,9 @@ add_executable(ros_video_save src/ros_video_save.cpp)
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
  )
+ 
+ add_executable(video2ros_pub src/video2ros_pub.cpp)
+ target_link_libraries(video2ros_pub
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+ )
