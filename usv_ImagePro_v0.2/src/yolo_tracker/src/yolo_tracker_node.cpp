@@ -112,7 +112,7 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 			cout<<"center_y="<<center_y<<endl;
 			//拖链启动条件
 //			if((310<(yoloBbox.x+yoloBbox.width/2)<330)&&((460<(yoloBbox.y+yoloBbox.height/2)<480)))
-			if((300<center_x)&&(center_x<340)&&(420<center_y)&&(center_y<480))
+			if((160<center_x)&&(center_x<480)&&(360<center_y)&&(center_y<480))
 			{
 				//拖链启动，交接控制权。
 				ROS_INFO("tuolian start...");
