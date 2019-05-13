@@ -4,7 +4,7 @@
 	<!-- 测试视频 -->
 	<!-- <param name="videoname" value= "/home/xx/andyoyo/usv_ImagePro/src/ros_cv/data/lib2.avi"/> -->
 	<!-- 网络相机 -->
-	<param name="videoname" value="rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream"/>
+	<!-- <param name="videoname" value="rtsp://admin:txz123456@192.168.1.66:554/mjpeg/ch1/sub/av_stream"/> -->
 	</node>	
 	<node pkg="yolo_tracker" type="yolo_tracker_node" name="yolo_tracker" output="screen" respawn="true">	
 	</node>	
