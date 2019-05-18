@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	tuolian_pub=n1.advertise<xx_msgs::Flag>("flag_tuolian_start",1);
 
     ROS_INFO("waiting control...");
-	ros::Rate rate(30.0);
+	ros::Rate rate(10.0);  // 30
 	while (ros::ok())
     {
         if(cv::waitKey(10)==27)
