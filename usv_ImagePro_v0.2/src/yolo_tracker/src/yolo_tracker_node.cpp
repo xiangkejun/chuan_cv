@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	tuolian_pub=n1.advertise<xx_msgs::Flag>("flag_tuolian_start",1);
 
     ROS_INFO("waiting control...");
-	ros::Rate rate(30.0);
+	ros::Rate rate(10.0);  // 30
 	while (ros::ok())
     {
         if(cv::waitKey(10)==27)
@@ -52,7 +52,8 @@ void yoloBboxCB(const darknet_ros_msgs::BoundingBoxes::ConstPtr& box_msg)
     {
 		string className = box_msg->bounding_boxes[i].Class;
 		double probability = box_msg->bounding_boxes[i].probability;
-		if(className=="leaf"||className=="cup"||className=="person")//目标类别
+		//if(className=="leaf"||className=="cup"||className=="person")//目标类别
+        if(className=="paomo"||className=="bottle"||className=="laguan"||className=="milk_box"||className=="kuaiyin")
 		{ 
 			int xmin = box_msg->bounding_boxes[i].xmin;
 			int ymin = box_msg->bounding_boxes[i].ymin;
@@ -126,6 +127,9 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 				flag_cv_to_nav.flag = "nav start,cv stop";
 				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
 				ROS_INFO("nav start,cv stop");
+
+				lineSpeed = 0;   //tingzhi
+				angularVelocity = 0;
 			}
 
             

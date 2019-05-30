@@ -61,7 +61,7 @@ int main(int argc, char** argv)
   cap.set(CV_CAP_PROP_FRAME_WIDTH ,640);
   cap.set(CV_CAP_PROP_FRAME_HEIGHT,480);
   cv::Mat frame;
-  ros::Rate loop_rate(30);
+  ros::Rate loop_rate(10);  // 30
   
   while(nh.ok()&&cap.isOpened())
   {
