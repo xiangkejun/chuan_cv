@@ -8,10 +8,52 @@
 using namespace std;
 using namespace cv;
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
 //Init Rect
 Rect initRect(0,0,0,0);
 Point referencePoint(320,480);//参考点
 Rect yoloBbox(0,0,0,0);
+int flag_num=0;
+void *laji_do( void *arg )
+{
+	if(flag_laji_do == true)
+	{
+		sleep(0.1);
+		flag_num++;
+
+		//发布速度信息
+		geometry_msgs::Twist vel_msg;
+    	vel_msg.linear.x = 0.15;
+    	vel_msg.angular.z = 0;
+    	vel_pub.publish(vel_msg);
+		cout<<"laji get, ship go times "<<flag_num<<endl;
+		if(flag_num == 100)   //10s
+		{
+			flag_num =0;
+			flag_laji_do = false;
+				
+			xx_msgs::Flag flag_cv_to_nav;   // 继续导航
+			flag_cv_to_nav.flag = "nav start,cv stop";
+			ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
+			ROS_INFO("nav start,cv stop");
+		}
+	}
+}
+void create_all_thread(void)
+{
+	pthread_t thread_laji_do;
+	if( (pthread_create( &thread_laji_do , NULL ,laji_do, NULL )) != 0 )
+	{
+		perror("Create the thread_laji_do fail");
+		exit( 1 );
+	}
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -26,7 +68,7 @@ int main(int argc, char* argv[])
 	tuolian_pub=n1.advertise<xx_msgs::Flag>("flag_tuolian_start",1);
 
     ROS_INFO("waiting control...");
-	ros::Rate rate(10.0);  // 30
+	ros::Rate rate(30.0);
 	while (ros::ok())
     {
         if(cv::waitKey(10)==27)
@@ -52,8 +94,7 @@ void yoloBboxCB(const darknet_ros_msgs::BoundingBoxes::ConstPtr& box_msg)
     {
 		string className = box_msg->bounding_boxes[i].Class;
 		double probability = box_msg->bounding_boxes[i].probability;
-		//if(className=="leaf"||className=="cup"||className=="person")//目标类别
-        if(className=="paomo"||className=="bottle"||className=="laguan"||className=="milk_box"||className=="kuaiyin")
+		if(className=="leaf"||className=="cup"||className=="person")//目标类别
 		{ 
 			int xmin = box_msg->bounding_boxes[i].xmin;
 			int ymin = box_msg->bounding_boxes[i].ymin;
@@ -113,7 +154,7 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 			cout<<"center_y="<<center_y<<endl;
 			//拖链启动条件
 //			if((310<(yoloBbox.x+yoloBbox.width/2)<330)&&((460<(yoloBbox.y+yoloBbox.height/2)<480)))
-			if((160<center_x)&&(center_x<480)&&(360<center_y)&&(center_y<480))
+			if((300<center_x)&&(center_x<340)&&(420<center_y)&&(center_y<480))
 			{
 				//拖链启动，交接控制权。
 				ROS_INFO("tuolian start...");
@@ -122,14 +163,9 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 				flag_tuolian.flag = "tuolian start";
 				tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
 
-				sleep(15); // 拖链运动10s后导航重新开始
-				xx_msgs::Flag flag_cv_to_nav;
-				flag_cv_to_nav.flag = "nav start,cv stop";
-				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
-				ROS_INFO("nav start,cv stop");
+				flag_laji_do = true;   //垃圾到指定区域
 
-				lineSpeed = 0;   //tingzhi
-				angularVelocity = 0;
+
 			}
 
             
