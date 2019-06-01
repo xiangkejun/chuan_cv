@@ -235,19 +235,20 @@ void *laji_do( void *arg )
         vel_msg.linear.x = 0.0;
     	vel_msg.angular.z = 0;
     	vel_pub.publish(vel_msg);
+		
+		xx_msgs::Flag flag_tuolian;
+		flag_tuolian.flag = "tuolian stop";
+		tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
+		ROS_INFO("tuolian stop");
 
-			flag_num =0;
-			flag_laji_do = false;
-			
-                        xx_msgs::Flag flag_tuolian;
-		        flag_tuolian.flag = "tuolian stop";
-			tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
-			ROS_INFO("tuolian stop");
+		sleep(3);
+		flag_num =0;
+		flag_laji_do = false;
 
-			xx_msgs::Flag flag_cv_to_nav;   // 继续导航
-			flag_cv_to_nav.flag = "nav start,cv stop";
-			ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
-			ROS_INFO("nav start,cv stop");
+		xx_msgs::Flag flag_cv_to_nav;   // 继续导航
+		flag_cv_to_nav.flag = "nav start,cv stop";
+		ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
+		ROS_INFO("nav start,cv stop");
 		}
 	}
 }
