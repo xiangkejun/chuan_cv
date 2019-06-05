@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -8,26 +9,39 @@
 using namespace std;
 using namespace cv;
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
 //Init Rect
 Rect initRect(0,0,0,0);
-Point referencePoint(320,480);//参考点
+Point referencePoint(320,480);//参考点  heng   xia
 Rect yoloBbox(0,0,0,0);
+void create_all_thread(void);
+
+
+>>>>>>> 919105f5f040e89adec9734ffe13b8f0075fa410
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "yolo_tracker");
-    ros::NodeHandle n1;
+        ros::NodeHandle n1;
 	image_transport::ImageTransport it(n1);
-    image_transport::Subscriber img_sub = it.subscribe("/camera/image", 10, imageCB);//订阅图像消息
+        image_transport::Subscriber img_sub = it.subscribe("/camera/image", 10, imageCB);//订阅图像消息
 	ros::Subscriber Bbox_sub = n1.subscribe("/darknet_ros/bounding_boxes", 10, yoloBboxCB);//订阅boundingbox消息
 	ros::Subscriber controlFlag_sub = n1.subscribe<xx_msgs::Flag>("flag_nav_to_cv",10,gainControlCB);//订阅控制权限标志
 	vel_pub = n1.advertise<geometry_msgs::Twist>("/cmd_vel_mux/input/cv_vel",10);//发布速度消息
 	ctrl_pub=n1.advertise<xx_msgs::Flag>("flag_cv_to_nav",1);
 	tuolian_pub=n1.advertise<xx_msgs::Flag>("flag_tuolian_start",1);
 
-    ROS_INFO("waiting control...");
-	ros::Rate rate(10.0);  // 30
+
+
+        ROS_INFO("waiting control...");
+	ros::Rate rate(10.0);
 	while (ros::ok())
     {
+	 create_all_thread();
         if(cv::waitKey(10)==27)
          {
             std::cout<<"ESC!"<<std::endl;
@@ -51,8 +65,8 @@ void yoloBboxCB(const darknet_ros_msgs::BoundingBoxes::ConstPtr& box_msg)
     {
 		string className = box_msg->bounding_boxes[i].Class;
 		double probability = box_msg->bounding_boxes[i].probability;
-		//if(className=="leaf"||className=="cup"||className=="person")//目标类别
-        if(className=="paomo"||className=="bottle"||className=="laguan"||className=="milk_box"||className=="kuaiyin")
+	//	if(className=="leaf"||className=="cup"||className=="person")//目标类别
+		if(className=="paomo"||className=="milk_box"||className=="bottle"||className=="laguan"||className=="kuaiyin")//目标类别
 		{ 
 			int xmin = box_msg->bounding_boxes[i].xmin;
 			int ymin = box_msg->bounding_boxes[i].ymin;
@@ -112,7 +126,8 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 			cout<<"center_y="<<center_y<<endl;
 			//拖链启动条件
 //			if((310<(yoloBbox.x+yoloBbox.width/2)<330)&&((460<(yoloBbox.y+yoloBbox.height/2)<480)))
-			if((160<center_x)&&(center_x<480)&&(360<center_y)&&(center_y<480))
+			//if((260<center_x)&&(center_x<380)&&(420<center_y)&&(center_y<480))  //shi wai 
+			if((260<center_x)&&(center_x<380)&&(300<center_y)&&(center_y<480))  //shi nei
 			{
 				//拖链启动，交接控制权。
 				ROS_INFO("tuolian start...");
@@ -128,8 +143,10 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
 				ROS_INFO("nav start,cv stop");
 
-				lineSpeed = 0;   //tingzhi
-				angularVelocity = 0;
+				flag_laji_do = true;   //垃圾到指定区域
+
+
+
 			}
 
             
@@ -202,4 +219,54 @@ void calcSpeed(cv::Rect &bBox,cv::Point &referencePoint,double &lineSpeed,double
         lineSpeed=0;
         angularVelocity=0;
     }
+}
+
+
+
+
+int flag_num=0;
+void *laji_do( void *arg )
+{
+  // cout<<"laji"<<endl;
+	if(flag_laji_do == true)
+	{
+		sleep(0.1);
+		flag_num++;
+
+		//发布速度信息
+		geometry_msgs::Twist vel_msg;
+    	vel_msg.linear.x = 0.15;
+    	vel_msg.angular.z = 0;
+    	vel_pub.publish(vel_msg);
+		cout<<"laji get, ship go times "<<flag_num<<endl;
+		if(flag_num == 70)   //7s
+		{
+        vel_msg.linear.x = 0.0;
+    	vel_msg.angular.z = 0;
+    	vel_pub.publish(vel_msg);
+		
+		xx_msgs::Flag flag_tuolian;
+		flag_tuolian.flag = "tuolian stop";
+		tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
+		ROS_INFO("tuolian stop");
+
+		sleep(3);
+		flag_num =0;
+		flag_laji_do = false;
+
+		xx_msgs::Flag flag_cv_to_nav;   // 继续导航
+		flag_cv_to_nav.flag = "nav start,cv stop";
+		ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
+		ROS_INFO("nav start,cv stop");
+		}
+	}
+}
+void create_all_thread(void)
+{
+	pthread_t thread_laji_do;
+	if( (pthread_create( &thread_laji_do , NULL ,laji_do, NULL )) != 0 )
+	{
+		perror("Create the thread_laji_do fail");
+		exit( 1 );
+	}
 }

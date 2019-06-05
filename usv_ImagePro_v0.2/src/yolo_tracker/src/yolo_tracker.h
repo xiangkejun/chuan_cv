@@ -22,6 +22,8 @@
 
 bool gainControl_flag = false;//控制权标志位
 bool yoloFindTarget = false;  //yolo状态标志位
+bool flag_laji_do = false;  //垃圾到指定区域后船继续前进标志
+
 double lineSpeed = 0;         //线速度
 double angularVelocity = 0;   //角速度
 int tryYoloCount = 0;         //yolo尝试次数计数
