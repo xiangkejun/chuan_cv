@@ -4,7 +4,7 @@
 
 ./rundarket.sh  需使用网线连接tx2与路由器，避免乱码。
 
-./runyoloTracker.sh
+.yoloTracker.sh
 
 ./test_flag_nav2cv.sh 启动图像处理
 
