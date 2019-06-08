@@ -22,7 +22,6 @@ Rect yoloBbox(0,0,0,0);
 void create_all_thread(void);
 
 
->>>>>>> 919105f5f040e89adec9734ffe13b8f0075fa410
 int main(int argc, char* argv[])
 {
 	ros::init(argc, argv, "yolo_tracker");
