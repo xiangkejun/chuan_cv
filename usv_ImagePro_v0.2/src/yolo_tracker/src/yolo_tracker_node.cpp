@@ -136,13 +136,6 @@ void imageCB(const sensor_msgs::ImageConstPtr& msg)
 				flag_tuolian.flag = "tuolian start";
 				tuolian_pub.publish(flag_tuolian);   //发布图像控制标志
 
-
-				//sleep(15); // 拖链运动10s后导航重新开始
-				xx_msgs::Flag flag_cv_to_nav;
-				flag_cv_to_nav.flag = "nav start,cv stop";
-				ctrl_pub.publish(flag_cv_to_nav);   //发布图像控制标志
-				ROS_INFO("nav start,cv stop");
-
 				flag_laji_do = true;   //垃圾到指定区域
 
 
